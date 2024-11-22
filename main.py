@@ -13,9 +13,15 @@ class Task(BaseModel):
 
 tasks = []
 
-@app.get("/")
-def read():
-    return {"message": "hello!"}
+@app.post("/tasks", response_model=Task)
+def create_task(task: Task):
+    task.id = uuid4()
+    tasks.append(task)
+    return task
+
+@app.get("/tasks", response_model=List[Task])
+def read_tasks():
+    return tasks
 
 if __name__ == "__main__":
     import uvicorn
